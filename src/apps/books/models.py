@@ -38,7 +38,8 @@ class Category(AbstractSlugModel, AbstractTimestampsModel, AbstractAuditableMode
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(text=str(self.name))
+        if not self.pk:
+            self.slug = slugify(text=str(self.name))
         super().save(*args, **kwargs)
 
     class Meta:
