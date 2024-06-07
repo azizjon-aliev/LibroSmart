@@ -5,22 +5,22 @@
 ### Clone project
 
 ```bash
-git clone 
+git clone https://github.com/azizjon-aliev/LibroSmart.git
 ```
 
-### Copy the .env.example file to .env and edit
+### Copy the .env.example file as .env and set values to empty fields 
 
 ```bash 
 cp .env.example .env
 ```
 
-### With docker compose:
+### Run with docker compose:
 
 ```bash
 docker compose up -d
 ```
 
-### Without docker compose:
+### Run without docker compose:
 
 #### Add virtualenv
 
