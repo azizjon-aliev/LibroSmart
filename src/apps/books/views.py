@@ -32,6 +32,7 @@ class AuthorAPIView(BaseAPIView):
     detail_serializer = AuthorResponseDetailSerializer
     create_serializer = AuthorCreateSerializer
     update_serializer = AuthorUpdateSerializer
+    lookup_field = "pk"
 
     def get_queryset(self):
         return Author.objects.filter(Q(created_by=self.request.user) | Q(updated_by=self.request.user))
