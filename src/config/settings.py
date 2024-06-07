@@ -1,13 +1,36 @@
 import os
+from http import HTTPMethod
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = 'django-insecure-ycr-cil66ht^__)ug_24f+x!=q(%((401x3xpt$7+u7sv60#*7'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
-DEBUG = True
+DEBUG = os.getenv("DJANGO_ENV") != "production"
 
-ALLOWED_HOSTS = []
+# =============== CORS ===================
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", default="").split(",")
+CORS_ALLOWED_ORIGINS = os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", default="").split(",")
+CORS_ALLOW_METHODS = (
+    HTTPMethod.DELETE,
+    HTTPMethod.GET,
+    HTTPMethod.PATCH,
+    HTTPMethod.POST,
+    HTTPMethod.PUT,
+)
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
+CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,7 +87,7 @@ ROOT_URLCONF = 'src.config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,10 +102,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'src.config.wsgi.application'
 
+# ============== DATABASE ==============
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
     }
 }
 
@@ -101,12 +129,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-RU'
-
-TIME_ZONE = 'Asia/Dushanbe'
-
+LANGUAGE_CODE = os.environ.get("DJANGO_LANGUAGE_CODE") or "en-us"
+TIME_ZONE = os.environ.get("DJANGO_TIME_ZONE") or "UTC"
 USE_I18N = True
-
 USE_TZ = True
 
 STATIC_URL = "/static/"
