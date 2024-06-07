@@ -3,13 +3,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
 SECRET_KEY = 'django-insecure-ycr-cil66ht^__)ug_24f+x!=q(%((401x3xpt$7+u7sv60#*7'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,10 +16,38 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # libraries
+    'rest_framework',
+    'drf_spectacular',
+    'django_filters',
     # apps
     'src.apps.common',
     'src.apps.books',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Libro Smart API',
+    'DESCRIPTION': 'API for Libro Smart project',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    "SPECTACULAR_DEFAULTS": {
+        "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    },
+    "SCHEMA_PATH_PREFIX": r"/api/v[0-9]+/[a-zA-Z]+/",
+    "COMPONENT_SPLIT_REQUEST": True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,14 +79,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'src.config.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -77,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Asia/Dushanbe'
@@ -85,7 +108,6 @@ TIME_ZONE = 'Asia/Dushanbe'
 USE_I18N = True
 
 USE_TZ = True
-
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
