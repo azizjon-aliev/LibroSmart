@@ -1,7 +1,10 @@
 from django.db import models
+from slugify import slugify
+
+from src.apps.common.models import AbstractTimestampsModel, AbstractAuditableModel, AbstractSlugModel
 
 
-class Author(models.Model):
+class Author(AbstractTimestampsModel, AbstractAuditableModel):
     """ Author model
     """
     first_name = models.CharField(verbose_name="Имя", max_length=255)
@@ -18,7 +21,7 @@ class Author(models.Model):
         ordering = ('-id',)
 
 
-class Category(models.Model):
+class Category(AbstractSlugModel, AbstractTimestampsModel, AbstractAuditableModel):
     """ Category model
     """
     name = models.CharField(verbose_name="Название", max_length=200, unique=True, db_index=True)
@@ -34,13 +37,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(text=str(self.name))
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         ordering = ('-id',)
 
 
-class Book(models.Model):
+class Book(AbstractSlugModel, AbstractTimestampsModel, AbstractAuditableModel):
     """ Book model
     """
     image = models.ImageField(verbose_name="Изображение", upload_to="books/")
@@ -60,6 +67,10 @@ class Book(models.Model):
     )
     publication_date = models.DateField(verbose_name="Дата публикации")
     is_published = models.BooleanField(verbose_name="Опубликован", default=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(text=str(self.title))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
