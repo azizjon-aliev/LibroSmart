@@ -58,10 +58,6 @@ python manage.py init_admin
 python manage.py runserver
 ```
 
-##### Username - admin
-
-##### Password - admin
-
 ### API Documentation
 
 ```bash
@@ -73,4 +69,10 @@ http://localhost/swagger/
 ```bash
 http://localhost/admin/
 ```
+
+### Data for login
+
+##### Username - admin
+
+##### Password - admin
 
