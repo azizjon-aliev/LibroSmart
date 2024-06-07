@@ -21,7 +21,7 @@ RUN apk update && apk add --no-cache \
     postgresql-dev
 
 # Copy only requirements to cache them in docker layer
-COPY requirements/requirements.txt $PROJECT_DIR/
+COPY requirements.txt $PROJECT_DIR/
 
 # Install project dependencies:
 RUN pip install -r $PROJECT_DIR/requirements.txt
